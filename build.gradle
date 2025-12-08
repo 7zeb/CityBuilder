@@ -21,6 +21,6 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17) // Spigot 1.20 requires Java 17
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
