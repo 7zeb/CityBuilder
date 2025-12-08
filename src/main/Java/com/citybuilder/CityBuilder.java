@@ -14,9 +14,7 @@ public class CityBuilder extends JavaPlugin {
         if (getCommand("fillerbuilding") != null) {
             getCommand("fillerbuilding").setExecutor(new FillerCommand());
         }
-
-        // Future: initialize structure manager, load templates, etc.
-        // StructureManager.init(this);
+         StructureManager.init(this);
     }
 
     @Override
