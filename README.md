@@ -55,4 +55,4 @@ This plugin will be used in Mocodonia
 
 ## 💡 Vision
 CityBuilder isn’t just about filling space—it’s about **accelerating creativity**.  
-From survival towns to roleplay servers, from lore-rich worlds to quick prototypes, CityBuilder helps communities build faster, smarter, and with style.
+From survival towns to massive city building servers, from lore-rich worlds to quick prototypes, CityBuilder helps communities build faster, smarter, and with style.
