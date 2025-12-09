@@ -1,0 +1,70 @@
+name: CityBuilder CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*.*.*'
+  pull_request:
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        run: ./gradlew build
+
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Checkstyle
+        run: ./gradlew checkstyleMain
+
+  validate:
+    name: Validate Schematics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check schematics folder
+        run: |
+          if [ ! -d "structures" ]; then
+            echo "No structures folder found!"
+            exit 1
+          fi
+          if [ -z "$(ls -A structures/*.schem 2>/dev/null)" ]; then
+            echo "No schematics found!"
+            exit 1
+          fi
+
+  release:
+    name: Release Plugin
+    needs: [build, lint, validate]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build
+        run: ./gradlew build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CityBuilder
+          path: build/libs/*.jar
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
