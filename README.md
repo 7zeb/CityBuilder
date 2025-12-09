@@ -17,7 +17,7 @@ It’s designed to help server owners, builders, and communities populate towns 
 ---
 
 ## 🚀 Installation
-1. Download the latest release from [Releases]([https://github.com/7zeb/CityBuilder/releases]).
+1. Download the latest release from [Releases](https://github.com/7zeb/CityBuilder/releases).
 2. Place the `.jar` file into your server’s `plugins/` folder.
 3. Restart your server.
 4. Use `/fillerbuilding <template>` to spawn structures.
