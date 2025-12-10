@@ -24,7 +24,7 @@ jobs:
       - name: Install Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 8.10.2
+          gradle-version: 9.2.1
 
       # Build the Spigot plugin JAR
       - name: Build with Gradle
