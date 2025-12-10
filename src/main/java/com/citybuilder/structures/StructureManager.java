@@ -45,7 +45,7 @@ public class StructureManager {
             try (EditSession editSession = WorldEdit.getInstance()
                     .newEditSession(BukkitAdapter.adapt(player.getWorld()))) {
 
-                Operation operation = new ClipboardHolder(clipboard)
+                new ClipboardHolder(clipboard)
                         .createPaste(editSession)
                         .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
                         .ignoreAirBlocks(false)
