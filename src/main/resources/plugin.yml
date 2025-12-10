@@ -12,23 +12,22 @@ commands:
     usage: /fillerbuilding <template>
     permission: citybuilder.filler.build
 
-    citybuilderhelp:
-      description: Shows help information for CityBuilder commands
-      usage: /citybuilderhelp
-      permission: citybuilder.help
-  
+  citybuilderhelp:
+    description: Shows help information for CityBuilder commands
+    usage: /citybuilderhelp
+    permission: citybuilder.help
+
   citybuilderabout:
-      description: Shows information about the CityBuilder plugin.
-      usage: /citybuilderabout
-      permission: citybuilder.about
-      
+    description: Shows information about the CityBuilder plugin
+    usage: /citybuilderabout
+    permission: citybuilder.about
 
 permissions:
   citybuilder.filler.build:
     description: Allows player to spawn filler buildings
     default: op
 
-citybuilder.help:
+  citybuilder.help:
     description: Allows player to view CityBuilder help
     default: true
 
