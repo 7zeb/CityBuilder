@@ -17,8 +17,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.operation.Operation;
-import com.sk89q.worldedit.operation.Operations;
+
 
 public class StructureManager {
 
@@ -51,8 +50,6 @@ public class StructureManager {
                         .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
                         .ignoreAirBlocks(false)
                         .build();
-
-                Operations.complete(operation);
                 player.sendMessage(ChatColor.GREEN + "Structure pasted: " + name);
 
             }
