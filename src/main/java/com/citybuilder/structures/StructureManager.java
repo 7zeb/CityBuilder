@@ -15,6 +15,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.WorldEditException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,10 +58,13 @@ public class StructureManager {
                         .ignoreAirBlocks(false)
                         .build();
 
-                // Run the paste operation
-                Operations.complete(operation);
-
-                player.sendMessage(ChatColor.GREEN + "Pasted schematic: " + name);
+                try {
+                    Operations.complete(operation);
+                    player.sendMessage(ChatColor.GREEN + "Pasted schematic: " + name);
+                } catch (WorldEditException e) {
+                    player.sendMessage(ChatColor.RED + "Error pasting schematic: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
 
         } catch (IOException e) {
