@@ -2,8 +2,9 @@ package com.citybuilder;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import com.citybuilder.commands.FillerCommand;
+import com.citybuilder.commands.FillerListCommand;
 import com.citybuilder.structures.StructureManager;
-import java.io.File; 
+import java.io.File;
 
 public class CityBuilder extends JavaPlugin {
 
@@ -29,6 +30,10 @@ public class CityBuilder extends JavaPlugin {
         // Register commands
         if (getCommand("fillerbuilding") != null) {
             getCommand("fillerbuilding").setExecutor(new FillerCommand());
+        }
+
+        if (getCommand("fillerlist") != null) {
+            getCommand("fillerlist").setExecutor(new FillerListCommand(this));
         }
 
         // Initialize structure manager
