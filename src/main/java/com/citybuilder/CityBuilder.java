@@ -3,6 +3,7 @@ package com.citybuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.citybuilder.commands.FillerCommand;
 import com.citybuilder.commands.FillerListCommand;
+import com.citybuilder.commands.FillerTabCompleter; // <-- import the tab completer
 import com.citybuilder.structures.StructureManager;
 import java.io.File;
 
@@ -30,6 +31,7 @@ public class CityBuilder extends JavaPlugin {
         // Register commands
         if (getCommand("fillerbuilding") != null) {
             getCommand("fillerbuilding").setExecutor(new FillerCommand());
+            getCommand("fillerbuilding").setTabCompleter(new FillerTabCompleter(this)); // <-- wire tab completer
         }
 
         if (getCommand("fillerlist") != null) {
