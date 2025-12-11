@@ -3,22 +3,22 @@ package com.citybuilder.structures;
 import com.citybuilder.CityBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.Location;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class StructureManager {
 
@@ -26,45 +26,45 @@ public class StructureManager {
 
     public static void init(CityBuilder pl) {
         plugin = pl;
-        plugin.getLogger().info("StructureManager initialized.");
     }
 
     public static void paste(Player player, String name) {
-        File schemFile = new File(plugin.getDataFolder(), "structures/" + name + ".schem");
+        File structuresFolder = new File(plugin.getDataFolder(), "structures");
+        File schematicFile = new File(structuresFolder, name + ".schem");
 
-        if (!schemFile.exists()) {
-            player.sendMessage(ChatColor.RED + "Structure file not found: " + name + ".schem");
+        if (!schematicFile.exists()) {
+            player.sendMessage(ChatColor.RED + "Schematic not found: " + name);
             return;
         }
 
-        ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
+        ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if (format == null) {
-            player.sendMessage(ChatColor.RED + "Unknown schematic format: " + schemFile.getName());
+            player.sendMessage(ChatColor.RED + "Unknown schematic format for: " + name);
             return;
         }
 
-        try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
+        try (FileInputStream fis = new FileInputStream(schematicFile);
+             ClipboardReader reader = format.getReader(fis)) {
+
             Clipboard clipboard = reader.read();
-            Location loc = player.getLocation();
 
             try (EditSession editSession = WorldEdit.getInstance()
                     .newEditSession(BukkitAdapter.adapt(player.getWorld()))) {
 
-                new ClipboardHolder(clipboard)
+                Operation operation = new ClipboardHolder(clipboard)
                         .createPaste(editSession)
-                        .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
+                        .to(BukkitAdapter.asBlockVector(player.getLocation()))
                         .ignoreAirBlocks(false)
-                        .build()
-                        .execute(); // <-- direct execution in WorldEdit 7.3.0
+                        .build();
 
-                player.sendMessage(ChatColor.GREEN + "Structure pasted: " + name);
+                // Run the paste operation
+                Operations.complete(operation);
+
+                player.sendMessage(ChatColor.GREEN + "Pasted schematic: " + name);
             }
 
         } catch (IOException e) {
-            player.sendMessage(ChatColor.RED + "Error reading schematic: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            player.sendMessage(ChatColor.RED + "Error pasting structure: " + e.getMessage());
+            player.sendMessage(ChatColor.RED + "Error loading schematic: " + e.getMessage());
             e.printStackTrace();
         }
     }
