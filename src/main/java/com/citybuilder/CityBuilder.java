@@ -2,7 +2,8 @@ package com.citybuilder;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import com.citybuilder.commands.FillerCommand;
-import com.citybuilder.structures.StructureManager; // <-- add this import
+import com.citybuilder.structures.StructureManager;
+import java.io.File; 
 
 public class CityBuilder extends JavaPlugin {
 
@@ -10,6 +11,20 @@ public class CityBuilder extends JavaPlugin {
     public void onEnable() {
         // Log startup
         getLogger().info("CityBuilder has been enabled!");
+
+        // Ensure plugin data folder exists
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
+
+        // Ensure structures folder exists inside plugin data folder
+        File structuresFolder = new File(getDataFolder(), "structures");
+        if (!structuresFolder.exists()) {
+            structuresFolder.mkdirs();
+            getLogger().info("Created structures folder at: " + structuresFolder.getPath());
+        } else {
+            getLogger().info("Structures folder ready at: " + structuresFolder.getPath());
+        }
 
         // Register commands
         if (getCommand("fillerbuilding") != null) {
