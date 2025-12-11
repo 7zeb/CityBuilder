@@ -1,5 +1,5 @@
 name: CityBuilder
-version: 1.2.2
+version: 1.3.0
 main: com.citybuilder.CityBuilder
 api-version: 1.21
 author: 7Zeb
@@ -11,6 +11,11 @@ commands:
     description: Spawn a filler building at your location
     usage: /fillerbuilding <template>
     permission: citybuilder.filler.build
+
+  fillerlist:
+    description: List available filler building schematics
+    usage: /fillerlist
+    permission: citybuilder.filler.list
 
   citybuilderhelp:
     description: Shows help information for CityBuilder commands
@@ -26,6 +31,10 @@ permissions:
   citybuilder.filler.build:
     description: Allows player to spawn filler buildings
     default: op
+
+  citybuilder.filler.list:
+    description: Allows player to list available filler schematics
+    default: true
 
   citybuilder.help:
     description: Allows player to view CityBuilder help
