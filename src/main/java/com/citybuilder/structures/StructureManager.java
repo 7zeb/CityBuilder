@@ -7,17 +7,17 @@ import org.bukkit.Location;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.ClipboardHolder;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.session.EditSession;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-
 
 public class StructureManager {
 
@@ -36,9 +36,13 @@ public class StructureManager {
             return;
         }
 
-        try (ClipboardReader reader = ClipboardFormats.findByFile(schemFile)
-                .getReader(new FileInputStream(schemFile))) {
+        ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
+        if (format == null) {
+            player.sendMessage(ChatColor.RED + "Unknown schematic format: " + schemFile.getName());
+            return;
+        }
 
+        try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
             Clipboard clipboard = reader.read();
             Location loc = player.getLocation();
 
@@ -49,11 +53,15 @@ public class StructureManager {
                         .createPaste(editSession)
                         .to(BlockVector3.at(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))
                         .ignoreAirBlocks(false)
-                        .build();
-                player.sendMessage(ChatColor.GREEN + "Structure pasted: " + name);
+                        .build()
+                        .execute(); // <-- direct execution in WorldEdit 7.3.0
 
+                player.sendMessage(ChatColor.GREEN + "Structure pasted: " + name);
             }
 
+        } catch (IOException e) {
+            player.sendMessage(ChatColor.RED + "Error reading schematic: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
             player.sendMessage(ChatColor.RED + "Error pasting structure: " + e.getMessage());
             e.printStackTrace();
